@@ -1,4 +1,4 @@
-package com.elthobhy.javapost.models;
+package com.elthobhy.javapos.models;
 
 public class Salam {
     private final long id;
