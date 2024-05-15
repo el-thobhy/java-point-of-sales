@@ -1,0 +1,38 @@
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  layout:decorate="~{fragments/layout}"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+  <head>
+    <title>Customer Index</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="h2">Customer</div>
+      <div>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th class="col-1">Id</th>
+              <th class="col-3">Name</th>
+              <th class="col-1 text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Richard Lee</td>
+              <td class="d-flex justify-content-center">
+                <div class="btn-group">
+                  <button class="btn btn-primary fas fa-circle-info"></button>
+                  <button class="btn btn-success fas fa-pen-to-square"></button>
+                  <button class="btn btn-danger fas fa-trash"></button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
