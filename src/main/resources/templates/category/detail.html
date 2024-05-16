@@ -1,15 +1,7 @@
-<html
-  xmlns:th="http://www.thymeleaf.org"
-  layout:decorate="~{fragments/layout}"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
->
-  <head>
-    <title>Detail::User</title>
-  </head>
-
+<html>
   <body>
     <div layout:fragment="content">
-      <h1>Category Details</h1>
+      <h1>Category Details of Id = <span th:text="${id}"></span></h1>
     </div>
   </body>
 </html>

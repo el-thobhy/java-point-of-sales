@@ -10,7 +10,7 @@
     <script src="/js/jquery-3.7.1.js"></script>
     <script src="/js/bootstrap.min.js"></script>
   </head>
-  <body>
+  <body data-bs-theme="dark">
     <!-- navigation -->
     <div th:replace="fragments/navbar"></div>
     <!-- content -->
@@ -19,5 +19,7 @@
     </div>
     <!-- footer -->
     <div th:replace="fragments/footer"></div>
+    <!-- modal -->
+    <div th:replace="fragments/modal"></div>
   </body>
 </html>
