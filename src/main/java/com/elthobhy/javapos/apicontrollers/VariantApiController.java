@@ -54,7 +54,7 @@ public class VariantApiController {
             if (exist.getId() > 0) {
                 return new ResponseEntity<Variant>(exist, HttpStatus.OK);
             } else
-                return new ResponseEntity<String>("Category Not Found", HttpStatus.NO_CONTENT);
+                return new ResponseEntity<String>("Variant Not Found", HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -95,7 +95,7 @@ public class VariantApiController {
             if (data.getId() > 0) {
                 return new ResponseEntity<Variant>(data, HttpStatus.OK);
             } else {
-                return new ResponseEntity<String>("Category does'nt exist", HttpStatus.NO_CONTENT);
+                return new ResponseEntity<String>("Variant does'nt exist", HttpStatus.NO_CONTENT);
             }
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

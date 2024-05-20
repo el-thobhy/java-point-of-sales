@@ -48,8 +48,6 @@ public class CategoryService {
             data.setCreateBy(exist.get().getCreateBy());
             data.setCraeteDate(exist.get().getCraeteDate());
             data.setDeleted(exist.get().isDeleted());
-            data.setUpdateDate(LocalDateTime.now());
-            data.setUpdateBy(0);
 
             return categoryRepo.save(data);
 

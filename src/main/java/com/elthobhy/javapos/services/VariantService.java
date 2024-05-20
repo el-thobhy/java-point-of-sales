@@ -48,7 +48,6 @@ public class VariantService {
             data.setCreateDate(exist.get().getCreateDate());
             data.setDeleted(exist.get().isDeleted());
             data.setUpdateDate(LocalDateTime.now());
-            data.setUpdateBy(0);
 
             return variantRepo.save(data);
 
