@@ -12,18 +12,26 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="Tbl_M_Category")
-public class Category {
+@Table(name = "Tbl_M_Product")
+public class Product {
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
     private long id;
-    @Column(name="name", length = 200, unique = true, nullable = false)
+    @Column(name = "variant_id")
+    private long variantId;
+    @Column(name = "name", unique=true, length=100, nullable = false)
     private String name;
     @Column(name = "description", nullable = true)
     private String description;
     @Column(name = "is_delete")
     private boolean isDeleted;
+    @Column(name = "price")
+    private double price;
+    @Column(name = "stock")
+    private int stock;
+    @Column(name = "image")
+    private String image;
     @Column(name = "create_by")
     private int createBy;
     @Column(name = "create_date")
@@ -38,6 +46,12 @@ public class Category {
     }
     public void setId(long id) {
         this.id = id;
+    }
+    public long getVariantId() {
+        return variantId;
+    }
+    public void setVariantId(long variantId) {
+        this.variantId = variantId;
     }
     public String getName() {
         return name;
@@ -57,17 +71,35 @@ public class Category {
     public void setDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
+    public double getPrice() {
+        return price;
+    }
+    public void setPrice(double price) {
+        this.price = price;
+    }
+    public int getStock() {
+        return stock;
+    }
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+    public String getImage() {
+        return image;
+    }
+    public void setImage(String image) {
+        this.image = image;
+    }
     public int getCreateBy() {
         return createBy;
     }
     public void setCreateBy(int createBy) {
         this.createBy = createBy;
     }
-    public LocalDateTime getCraeteDate() {
+    public LocalDateTime getCreateDate() {
         return createDate;
     }
-    public void setCraeteDate(LocalDateTime craeteDate) {
-        this.createDate = craeteDate;
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
     }
     public int getUpdateBy() {
         return updateBy;
@@ -81,4 +113,5 @@ public class Category {
     public void setUpdateDate(LocalDateTime updateDate) {
         this.updateDate = updateDate;
     }
+
 }
