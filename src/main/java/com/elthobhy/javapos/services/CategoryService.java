@@ -75,11 +75,8 @@ public class CategoryService {
         }
     }
 
-    public void getById(long id) {
-        Optional<Category> exist = categoryRepo.findById(id);
-        if (!exist.isEmpty()) {
-
-        }
+    public Category getById(long id) throws Exception {
+        return categoryRepo.findById(id).orElseThrow(() -> new Exception("Data not found"));
     }
 
     public List<Category> getByName(String name) throws Exception {

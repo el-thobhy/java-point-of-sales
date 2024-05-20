@@ -49,15 +49,18 @@ public class CategoryApiController {
         }
     }
 
-    // @GetMapping("/getById/{id}")
-    // public ResponseEntity<Category> getById(@PathVariable final long id) {
-    // try {
-
-    // return new ResponseEntity<Category>(HttpStatus.OK);
-    // } catch (Exception e) {
-    // return new ResponseEntity<Category>(HttpStatus.NO_CONTENT);
-    // }
-    // }
+    @GetMapping("/getById/{id}")
+    public ResponseEntity<?> getById(@PathVariable final long id) {
+        try {
+            Category exist = categoryService.getById(id);
+            if (exist.getId() > 0) {
+                return new ResponseEntity<Category>(exist, HttpStatus.OK);
+            } else
+                return new ResponseEntity<String>("Category Not Found", HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PostMapping("")
     public ResponseEntity<?> Create(@RequestBody Category data) throws Exception {
