@@ -29,20 +29,19 @@ public class CategoryService {
         }
     }
 
-    public void create(Category data) {
+    public Category create(Category data) {
         Optional<Category> categoryExist = categoryRepo.findByName(data.getName());
         if (categoryExist.isEmpty()) {
             // create category
-            categoryRepo.save(data);
-            throw new ResponseStatusException(HttpStatus.CREATED, "New Category Created");
+            return categoryRepo.save(data);
         } else {
             // cancel
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Category Already Exist");
+            return new Category();
         }
 
     }
 
-    public void update(Category data) {
+    public Category update(Category data) {
         Optional<Category> exist = categoryRepo.findById(data.getId());
         if (!exist.isEmpty()) {
             // update fields
@@ -52,15 +51,15 @@ public class CategoryService {
             data.setUpdateDate(LocalDateTime.now());
             data.setUpdateBy(0);
 
-            categoryRepo.save(data);
-            throw new ResponseStatusException(HttpStatus.OK, "Category Has Been Updated");
+            return categoryRepo.save(data);
+
         } else {
             // cancel
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category is not Exist");
+            return new Category();
         }
     }
 
-    public void delete(long id, int userId) {
+    public Category delete(long id, int userId) {
         Optional<Category> exist = categoryRepo.findById(id);
         if (!exist.isEmpty()) {
             // update fields
@@ -69,11 +68,24 @@ public class CategoryService {
             data.setUpdateDate(LocalDateTime.now());
             data.setUpdateBy(userId);
 
-            categoryRepo.save(data);
-            throw new ResponseStatusException(HttpStatus.OK, "Category Has Been Deleted");
+            return categoryRepo.save(data);
         } else {
             // cancel
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category is not Exist");
+            return new Category();
         }
+    }
+
+    public void getById(long id) {
+        Optional<Category> exist = categoryRepo.findById(id);
+        if (!exist.isEmpty()) {
+
+        }
+    }
+
+    public List<Category> getByName(String name) throws Exception {
+        // get category using part of category name
+        return categoryRepo.findByNameContainsIgnoreCase(name)
+                .orElseThrow(() -> new Exception("data not found"));
+
     }
 }
