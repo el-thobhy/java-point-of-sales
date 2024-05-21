@@ -1,6 +1,7 @@
 package com.elthobhy.javapos.apicontrollers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,16 @@ public class ProductApiController {
         try {
             List<Product> data = productService.getAll();
             return new ResponseEntity<List<Product>>(data, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @GetMapping("/allJoin")
+    public ResponseEntity<?> getAll() {
+        try {
+            List<Map<String, Object[]>> data = productService.getAllNative();
+            return new ResponseEntity<List<Map<String, Object[]>>>(data, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.NO_CONTENT);
         }
