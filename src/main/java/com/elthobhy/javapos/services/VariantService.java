@@ -30,9 +30,9 @@ public class VariantService {
         }
     }
 
-    public List<Map<String, Object[]>> getAllNative() throws Exception {
+    public List<Map<String, Object>> getAllNative() throws Exception {
         try {
-            List<Map<String, Object[]>> data = variantRepo.findAllNative().get();
+            List<Map<String, Object>> data = variantRepo.findAllNative().get();
             if (data.size() > 0) {
                 return data;
             } else
@@ -96,13 +96,13 @@ public class VariantService {
                 .orElseThrow(() -> new Exception("data not found"));
     }
 
-    public List<Map<String, Object[]>> getByCategoryNameNative(String name) throws Exception {
+    public List<Map<String, Object>> getByCategoryNameNative(String name) throws Exception {
         // get category using part of category name
         return variantRepo.findByCategoryNameNative(name)
                 .orElseThrow(() -> new Exception("data not found"));
     }
 
-    public List<Map<String, Object[]>> getByCategoryNameByIdNative(long id) throws Exception {
+    public List<Map<String, Object>> getByCategoryNameByIdNative(long id) throws Exception {
         // get category using part of category name
         return variantRepo.findByCategoryNameByIdNative(id)
                 .orElseThrow(() -> new Exception("data not found"));

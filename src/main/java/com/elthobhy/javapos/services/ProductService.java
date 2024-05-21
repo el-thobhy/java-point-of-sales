@@ -30,9 +30,9 @@ public class ProductService {
         }
     }
 
-    public List<Map<String, Object[]>> getAllNative() throws Exception {
+    public List<Map<String, Object>> getAllNative() throws Exception {
         try {
-            List<Map<String, Object[]>> data = productRepo.findAllNative().get();
+            List<Map<String, Object>> data = productRepo.findAllNative().get();
             if (data.size() > 0) {
                 return data;
             } else
@@ -93,6 +93,13 @@ public class ProductService {
     public List<Product> getByName(String name) throws Exception {
         // get category using part of category name
         return productRepo.findByNameContainsIgnoreCase(name)
+                .orElseThrow(() -> new Exception("data not found"));
+
+    }
+
+    public List<Map<String, Object>> getByCategoryOrVariantName(String name) throws Exception {
+        // get category using part of category name
+        return productRepo.findByVariantOrCategoryName(name)
                 .orElseThrow(() -> new Exception("data not found"));
 
     }

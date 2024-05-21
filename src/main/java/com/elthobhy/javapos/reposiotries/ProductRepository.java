@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.elthobhy.javapos.models.Product;
@@ -52,5 +53,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {// data
         // " WHERE " + //
         // " p.is_delete IS NOT true", nativeQuery = true)
         @Query(value = "SELECT * FROM vw_product_active", nativeQuery = true)
-        Optional<List<Map<String, Object[]>>> findAllNative();
+        Optional<List<Map<String, Object>>> findAllNative();
+
+        @Query(value = "SELECT * FROM vw_product_active " +
+                        " WHERE " +
+                        " lower(\"variantName\") LIKE " + "%:name% " +
+                        " OR lower(\"categoryName\") LIKE " + "%:name%", nativeQuery = true)
+        Optional<List<Map<String, Object>>> findByVariantOrCategoryName(@Param("name") String name);
 }

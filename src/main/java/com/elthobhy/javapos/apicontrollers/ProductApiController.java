@@ -37,8 +37,8 @@ public class ProductApiController {
     @GetMapping("/allJoin")
     public ResponseEntity<?> getAll() {
         try {
-            List<Map<String, Object[]>> data = productService.getAllNative();
-            return new ResponseEntity<List<Map<String, Object[]>>>(data, HttpStatus.OK);
+            List<Map<String, Object>> data = productService.getAllNative();
+            return new ResponseEntity<List<Map<String, Object>>>(data, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.NO_CONTENT);
         }
@@ -52,6 +52,20 @@ public class ProductApiController {
                 return new ResponseEntity<List<Product>>(data, HttpStatus.OK);
             } else {
                 return new ResponseEntity<List<Product>>(data, HttpStatus.NO_CONTENT);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/getByCategoryOrVariantName/{name}")
+    public ResponseEntity<?> getByCategoryOrVariantName(@PathVariable String name) throws Exception {
+        try {
+            List<Map<String, Object>> data = productService.getByCategoryOrVariantName(name.toLowerCase());
+            if (data.size() > 0) {
+                return new ResponseEntity<List<Map<String, Object>>>(data, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<List<Map<String, Object>>>(data, HttpStatus.NO_CONTENT);
             }
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

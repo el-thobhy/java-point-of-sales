@@ -44,7 +44,7 @@ public interface VariantRepository extends JpaRepository<Variant, Long> {// data
                         "    INNER JOIN tbl_m_category AS c ON v.category_id = c.id " + //
                         "WHERE " + //
                         "    v.is_deleted IS NOT true", nativeQuery = true)
-        Optional<List<Map<String, Object[]>>> findAllNative();
+        Optional<List<Map<String, Object>>> findAllNative();
 
         @Query(value = "SELECT " + " v.*, c.name As \"categoryName\" " +
                         " FROM tbl_m_variant AS v " +
@@ -52,12 +52,12 @@ public interface VariantRepository extends JpaRepository<Variant, Long> {// data
                         " WHERE " +
                         " v.is_deleted IS NOT true" +
                         " AND " + " LOWER(c.name) LIKE " + " %:name% ", nativeQuery = true)
-        Optional<List<Map<String, Object[]>>> findByCategoryNameNative(@Param("name") String name);
+        Optional<List<Map<String, Object>>> findByCategoryNameNative(@Param("name") String name);
 
         @Query(value = "SELECT * from vw_variant " +
                         " WHERE " +
                         " is_deleted IS NOT true" +
                         " AND " + " category_id = " + ":id ", nativeQuery = true)
-        Optional<List<Map<String, Object[]>>> findByCategoryNameByIdNative(@Param("id") long id);
+        Optional<List<Map<String, Object>>> findByCategoryNameByIdNative(@Param("id") long id);
 
 }
