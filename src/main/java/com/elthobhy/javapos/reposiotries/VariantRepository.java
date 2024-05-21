@@ -12,36 +12,36 @@ import com.elthobhy.javapos.models.Variant;
 
 @Repository
 public interface VariantRepository extends JpaRepository<Variant, Long> {// datatype dan primary key
-    Optional<Variant> findByName(String name);
+        Optional<Variant> findByName(String name);
 
-    Optional<Variant> findById(long id);
+        Optional<Variant> findById(long id);
 
-    Optional<List<Variant>> findByDeleted(boolean deleted);
+        Optional<List<Variant>> findByDeleted(boolean deleted);
 
-    Optional<List<Variant>> findByNameContainsIgnoreCase(String name); // jika cek kata yang banyak
+        Optional<List<Variant>> findByNameContainsIgnoreCase(String name); // jika cek kata yang banyak
 
-    Optional<List<Variant>> findByDescriptionContainsIgnoreCase(String description); // jika cek kata yang banyak
+        Optional<List<Variant>> findByDescriptionContainsIgnoreCase(String description); // jika cek kata yang banyak
 
-    Optional<List<Variant>> findByNameContainsIgnoreCaseOrDescriptionContainsIgnoreCase(String name,
-            String description); // jika cek
-    // kata yang
-    // banyak
+        Optional<List<Variant>> findByNameContainsIgnoreCaseOrDescriptionContainsIgnoreCase(String name,
+                        String description); // jika cek
+        // kata yang
+        // banyak
 
-    @Query(value = "SELECT " + //
-            "    v.create_by createBy, " + //
-            "    v.is_deleted deleted, " + //
-            "    c.name As categoryName, " + //
-            "    v.update_by updateBy, " + //
-            "    v.category_id categoryId, " + //
-            "    v.create_date createDate, " + //
-            "    v.id, " + //
-            "    v.update_date updateDate, " + //
-            "    v.name, " + //
-            "    v.description " + //
-            "FROM " + //
-            "    tbl_m_variant AS v " + //
-            "    INNER JOIN tbl_m_category AS c ON v.category_id = c.id " + //
-            "WHERE " + //
-            "    v.is_deleted IS NOT true", nativeQuery = true)
-    Optional<List<Map<String, Object[]>>> findAllNative();
+        @Query(value = "SELECT " + //
+                        "    v.create_by \"createBy\", " + //
+                        "    v.is_deleted \"deleted\", " + //
+                        "    c.name As \"categoryName\", " + //
+                        "    v.update_by \"updateBy\", " + //
+                        "    v.category_id \"categoryId\", " + //
+                        "    v.create_date \"createDate\", " + //
+                        "    v.id, " + //
+                        "    v.update_date \"updateDate\", " + //
+                        "    v.name, " + //
+                        "    v.description " + //
+                        "FROM " + //
+                        "    tbl_m_variant AS v " + //
+                        "    INNER JOIN tbl_m_category AS c ON v.category_id = c.id " + //
+                        "WHERE " + //
+                        "    v.is_deleted IS NOT true", nativeQuery = true)
+        Optional<List<Map<String, Object[]>>> findAllNative();
 }

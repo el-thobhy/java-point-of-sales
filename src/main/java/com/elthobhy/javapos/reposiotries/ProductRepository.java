@@ -30,26 +30,27 @@ public interface ProductRepository extends JpaRepository<Product, Long> {// data
         /**
          * @return
          */
-        @Query(value = "SELECT " + //
-                        "    p.create_by createBy, " + //
-                        "    p.is_delete deleted, " + //
-                        "    p.price, " + //
-                        "    p.stock, " + //
-                        "    v.name as variantName, " + //
-                        "    c.name as categoryName, " + //
-                        "    p.update_by updateBy, " + //
-                        "    p.create_date createDate, " + //
-                        "    p.id, " + //
-                        "    p.update_date updateDate, " + //
-                        "    p.variant_id variantId, " + //
-                        "    p.name, " + //
-                        "    p.description, " + //
-                        "    p.image " + //
-                        "FROM " + //
-                        "    tbl_m_product AS p " + //
-                        "    INNER JOIN tbl_m_variant AS v ON p.variant_id = v.id " +
-                        " INNER JOIN tbl_m_category AS c ON v.category_id=c.id " + //
-                        " WHERE " + //
-                        "    p.is_delete IS NOT true", nativeQuery = true)
+        // @Query(value = "SELECT " + //
+        // " p.create_by createBy, " + //
+        // " p.is_delete deleted, " + //
+        // " p.price, " + //
+        // " p.stock, " + //
+        // " v.name as variantName, " + //
+        // " c.name as categoryName, " + //
+        // " p.update_by updateBy, " + //
+        // " p.create_date createDate, " + //
+        // " p.id, " + //
+        // " p.update_date updateDate, " + //
+        // " p.variant_id variantId, " + //
+        // " p.name, " + //
+        // " p.description, " + //
+        // " p.image " + //
+        // "FROM " + //
+        // " tbl_m_product AS p " + //
+        // " INNER JOIN tbl_m_variant AS v ON p.variant_id = v.id " +
+        // " INNER JOIN tbl_m_category AS c ON v.category_id=c.id " + //
+        // " WHERE " + //
+        // " p.is_delete IS NOT true", nativeQuery = true)
+        @Query(value = "SELECT * FROM vw_product_active", nativeQuery = true)
         Optional<List<Map<String, Object[]>>> findAllNative();
 }

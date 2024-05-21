@@ -16,6 +16,7 @@ import com.elthobhy.javapos.reposiotries.CategoryRepository;
 public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepo;
+    private Optional<Category> exist;
 
     public List<Category> getAll() throws Exception {
         try {
@@ -30,8 +31,8 @@ public class CategoryService {
     }
 
     public Category create(Category data) {
-        Optional<Category> categoryExist = categoryRepo.findByName(data.getName());
-        if (categoryExist.isEmpty()) {
+        this.exist = categoryRepo.findByName(data.getName());
+        if (exist.isEmpty()) {
             // create category
             return categoryRepo.save(data);
         } else {
@@ -42,7 +43,7 @@ public class CategoryService {
     }
 
     public Category update(Category data) {
-        Optional<Category> exist = categoryRepo.findById(data.getId());
+        this.exist = categoryRepo.findById(data.getId());
         if (!exist.isEmpty()) {
             // update fields
             data.setCreateBy(exist.get().getCreateBy());
@@ -59,7 +60,7 @@ public class CategoryService {
     }
 
     public Category delete(long id, int userId) {
-        Optional<Category> exist = categoryRepo.findById(id);
+        this.exist = categoryRepo.findById(id);
         if (!exist.isEmpty()) {
             // update fields
             Category data = exist.get();
@@ -81,6 +82,13 @@ public class CategoryService {
     public List<Category> getByName(String name) throws Exception {
         // get category using part of category name
         return categoryRepo.findByNameContainsIgnoreCase(name)
+                .orElseThrow(() -> new Exception("data not found"));
+
+    }
+
+    public List<Category> getByFilter(String name) throws Exception {
+        // get category using part of category name
+        return categoryRepo.findByNameOrDescriptionNative(name)
                 .orElseThrow(() -> new Exception("data not found"));
 
     }

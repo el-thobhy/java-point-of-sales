@@ -49,6 +49,20 @@ public class CategoryApiController {
         }
     }
 
+    @GetMapping("/getByFilter/{filter}")
+    public ResponseEntity<?> getByFilter(@PathVariable String filter) throws Exception {
+        try {
+            List<Category> data = categoryService.getByFilter(filter);
+            if (data.size() > 0) {
+                return new ResponseEntity<List<Category>>(data, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<List<Category>>(data, HttpStatus.NO_CONTENT);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/getById/{id}")
     public ResponseEntity<?> getById(@PathVariable final long id) {
         try {
