@@ -58,6 +58,34 @@ public class VariantApiController {
         }
     }
 
+    @GetMapping("/getByCategoryNameNative/{name}")
+    public ResponseEntity<?> getByCategoryNameNative(@PathVariable String name) throws Exception {
+        try {
+            List<Map<String, Object[]>> data = variantService.getByCategoryNameNative(name);
+            if (data.size() > 0) {
+                return new ResponseEntity<List<Map<String, Object[]>>>(data, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<List<Map<String, Object[]>>>(data, HttpStatus.NO_CONTENT);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/getByCategoryNameByIdNative/{id}")
+    public ResponseEntity<?> getByCategoryNameByIdNative(@PathVariable long id) throws Exception {
+        try {
+            List<Map<String, Object[]>> data = variantService.getByCategoryNameByIdNative(id);
+            if (data.size() > 0) {
+                return new ResponseEntity<List<Map<String, Object[]>>>(data, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<List<Map<String, Object[]>>>(data, HttpStatus.NO_CONTENT);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/getById/{id}")
     public ResponseEntity<?> getById(@PathVariable final long id) {
         try {

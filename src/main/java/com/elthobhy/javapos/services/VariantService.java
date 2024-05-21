@@ -95,4 +95,16 @@ public class VariantService {
         return variantRepo.findByNameContainsIgnoreCase(name)
                 .orElseThrow(() -> new Exception("data not found"));
     }
+
+    public List<Map<String, Object[]>> getByCategoryNameNative(String name) throws Exception {
+        // get category using part of category name
+        return variantRepo.findByCategoryNameNative(name)
+                .orElseThrow(() -> new Exception("data not found"));
+    }
+
+    public List<Map<String, Object[]>> getByCategoryNameByIdNative(long id) throws Exception {
+        // get category using part of category name
+        return variantRepo.findByCategoryNameByIdNative(id)
+                .orElseThrow(() -> new Exception("data not found"));
+    }
 }

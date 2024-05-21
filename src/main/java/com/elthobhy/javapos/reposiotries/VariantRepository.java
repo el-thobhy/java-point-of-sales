@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.elthobhy.javapos.models.Variant;
@@ -44,4 +45,19 @@ public interface VariantRepository extends JpaRepository<Variant, Long> {// data
                         "WHERE " + //
                         "    v.is_deleted IS NOT true", nativeQuery = true)
         Optional<List<Map<String, Object[]>>> findAllNative();
+
+        @Query(value = "SELECT " + " v.*, c.name As \"categoryName\" " +
+                        " FROM tbl_m_variant AS v " +
+                        " INNER JOIN tbl_m_category AS c ON v.category_id = c.id " +
+                        " WHERE " +
+                        " v.is_deleted IS NOT true" +
+                        " AND " + " LOWER(c.name) LIKE " + " %:name% ", nativeQuery = true)
+        Optional<List<Map<String, Object[]>>> findByCategoryNameNative(@Param("name") String name);
+
+        @Query(value = "SELECT * from vw_variant " +
+                        " WHERE " +
+                        " is_deleted IS NOT true" +
+                        " AND " + " category_id = " + ":id ", nativeQuery = true)
+        Optional<List<Map<String, Object[]>>> findByCategoryNameByIdNative(@Param("id") long id);
+
 }
