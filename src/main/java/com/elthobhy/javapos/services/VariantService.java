@@ -2,6 +2,7 @@ package com.elthobhy.javapos.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,18 @@ public class VariantService {
     public List<Variant> getAll() throws Exception {
         try {
             List<Variant> data = variantRepo.findByDeleted(false).get();
+            if (data.size() > 0) {
+                return data;
+            } else
+                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Variant has no data");
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public List<Map<String, Object[]>> getAllNative() throws Exception {
+        try {
+            List<Map<String, Object[]>> data = variantRepo.findAllNative().get();
             if (data.size() > 0) {
                 return data;
             } else
