@@ -19,7 +19,7 @@ public class ProductService {
 
     public List<Product> getAll() throws Exception {
         try {
-            List<Product> data = productRepo.findAll();
+            List<Product> data = productRepo.findByDeleted(false).get();
             if (data.size() > 0) {
                 return data;
             } else

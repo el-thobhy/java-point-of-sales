@@ -19,7 +19,7 @@ public class CustomerService {
 
     public List<Customer> getAll() throws Exception {
         try {
-            List<Customer> data = customerRepo.findAll();
+            List<Customer> data = customerRepo.findByDeleted(false).get();
             if (data.size() > 0) {
                 return data;
             } else

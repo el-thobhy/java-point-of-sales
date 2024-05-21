@@ -31,7 +31,7 @@ public class OrderDetail {
 
     
     @Column(name = "is_delete")
-    private boolean isDeleted;
+    private boolean deleted;
     @Column(name = "create_by")
     private int createBy;
     @Column(name = "create_date")

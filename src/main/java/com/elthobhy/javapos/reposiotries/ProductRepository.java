@@ -14,6 +14,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {// data
 
     Optional<Product> findById(long id);
 
+    Optional<List<Product>> findByDeleted(boolean deleted);
+
     Optional<List<Product>> findByNameContainsIgnoreCase(String name); // jika cek kata yang banyak
 
     Optional<List<Product>> findByDescriptionContainsIgnoreCase(String description); // jika cek kata yang banyak

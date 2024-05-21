@@ -19,7 +19,7 @@ public class CategoryService {
 
     public List<Category> getAll() throws Exception {
         try {
-            List<Category> data = categoryRepo.findAll();
+            List<Category> data = categoryRepo.findByDeleted(false).get();
             if (data.size() > 0) {
                 return data;
             } else

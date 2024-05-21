@@ -19,7 +19,7 @@ public class VariantService {
 
     public List<Variant> getAll() throws Exception {
         try {
-            List<Variant> data = variantRepo.findAll();
+            List<Variant> data = variantRepo.findByDeleted(false).get();
             if (data.size() > 0) {
                 return data;
             } else

@@ -14,6 +14,8 @@ public interface VariantRepository extends JpaRepository<Variant, Long> {// data
 
     Optional<Variant> findById(long id);
 
+    Optional<List<Variant>> findByDeleted(boolean deleted);
+
     Optional<List<Variant>> findByNameContainsIgnoreCase(String name); // jika cek kata yang banyak
 
     Optional<List<Variant>> findByDescriptionContainsIgnoreCase(String description); // jika cek kata yang banyak

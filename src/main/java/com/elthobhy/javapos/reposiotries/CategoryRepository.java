@@ -12,6 +12,8 @@ import com.elthobhy.javapos.models.Category;
 public interface CategoryRepository extends JpaRepository<Category, Long> {// datatype dan primary key
     Optional<Category> findByName(String name);
 
+    Optional<List<Category>> findByDeleted(boolean deleted);
+
     Optional<Category> findById(long id);
 
     Optional<List<Category>> findByNameContainsIgnoreCase(String name); // jika cek kata yang banyak

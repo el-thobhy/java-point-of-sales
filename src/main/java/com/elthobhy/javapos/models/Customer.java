@@ -33,7 +33,7 @@ public class Customer {
     private int roleId;
 
     @Column(name = "is_delete")
-    private boolean isDeleted;
+    private boolean deleted;
     @Column(name = "create_by")
     private int createBy;
     @Column(name = "create_date")
@@ -101,11 +101,11 @@ public class Customer {
     }
 
     public boolean isDeleted() {
-        return isDeleted;
+        return deleted;
     }
 
-    public void setDeleted(boolean isDeleted) {
-        this.isDeleted = isDeleted;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public int getCreateBy() {

@@ -25,7 +25,7 @@ public class Variant {
     @Column(name = "description", nullable = true)
     private String description;
     @Column(name = "is_deleted")
-    private boolean isDeleted;
+    private boolean deleted;
     @Column(name = "create_by")
     private int createBy;
     @Column(name = "create_date")
@@ -69,11 +69,11 @@ public class Variant {
     }
 
     public boolean isDeleted() {
-        return isDeleted;
+        return deleted;
     }
 
-    public void setDeleted(boolean isDeleted) {
-        this.isDeleted = isDeleted;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public int getCreateBy() {

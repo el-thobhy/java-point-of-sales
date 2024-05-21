@@ -12,11 +12,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="Tbl_T_Order_Header")
+@Table(name = "Tbl_T_Order_Header")
 public class OrderHeader {
     @Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
 
     @Column(name = "trx_code", nullable = false, unique = true)
@@ -28,11 +28,10 @@ public class OrderHeader {
     @Column(name = "total_qty")
     private int totalQty;
     @Column(name = "is_checked_out")
-    private boolean isCheckedOut;
+    private boolean checkedOut;
 
-    
     @Column(name = "is_delete")
-    private boolean isDeleted;
+    private boolean deleted;
     @Column(name = "create_by")
     private int createBy;
     @Column(name = "create_date")
