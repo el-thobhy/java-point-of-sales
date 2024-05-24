@@ -90,7 +90,7 @@ public class ProductApiController {
         try {
             Product exist = productService.create(data);
             if (exist.getId() > 0) {
-                return new ResponseEntity<Product>(exist, HttpStatus.OK);
+                return new ResponseEntity<Product>(exist, HttpStatus.CREATED);
             } else {
                 return new ResponseEntity<String>("Product Already Exist", HttpStatus.CONFLICT);
             }

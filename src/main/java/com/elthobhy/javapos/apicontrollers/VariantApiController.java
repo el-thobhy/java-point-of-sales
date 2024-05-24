@@ -104,7 +104,7 @@ public class VariantApiController {
         try {
             Variant var = variantService.create(data);
             if (var.getId() > 0) {
-                return new ResponseEntity<Variant>(var, HttpStatus.OK);
+                return new ResponseEntity<Variant>(var, HttpStatus.CREATED);
             } else {
                 return new ResponseEntity<String>("Varian Already Exist", HttpStatus.NO_CONTENT);
             }

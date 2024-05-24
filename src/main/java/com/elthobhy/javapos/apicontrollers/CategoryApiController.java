@@ -81,7 +81,7 @@ public class CategoryApiController {
         try {
             Category exist = categoryService.create(data);
             if (exist.getId() > 0) {
-                return new ResponseEntity<Category>(exist, HttpStatus.OK);
+                return new ResponseEntity<Category>(exist, HttpStatus.CREATED);
             } else {
                 return new ResponseEntity<String>("Category Already Exist", HttpStatus.CONFLICT);
             }

@@ -8,14 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.elthobhy.javapos.models.Category;
 import com.elthobhy.javapos.models.OrderDetail;
 import com.elthobhy.javapos.models.OrderHeader;
 import com.elthobhy.javapos.services.OrderService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -54,11 +53,26 @@ public class OrderApiController {
     public ResponseEntity<?> create(@RequestBody OrderHeader data) {
         // create new order
         try {
-            OrderHeader exist = orderService.Create(data);
+            OrderHeader exist = orderService.create(data);
+            if (exist.getId() > 0) {
+                return new ResponseEntity<OrderHeader>(exist, HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<String>("Order Already Exist", HttpStatus.CONFLICT);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("")
+    public ResponseEntity<?> ureate(@RequestBody OrderHeader data) {
+        // update order
+        try {
+            OrderHeader exist = orderService.update(data);
             if (exist.getId() > 0) {
                 return new ResponseEntity<OrderHeader>(exist, HttpStatus.OK);
             } else {
-                return new ResponseEntity<String>("Order Already Exist", HttpStatus.CONFLICT);
+                return new ResponseEntity<String>("Order does not exist", HttpStatus.CONFLICT);
             }
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

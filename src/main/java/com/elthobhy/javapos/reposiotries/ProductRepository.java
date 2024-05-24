@@ -60,4 +60,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {// data
                         " lower(\"variantName\") LIKE " + "%:name% " +
                         " OR lower(\"categoryName\") LIKE " + "%:name%", nativeQuery = true)
         Optional<List<Map<String, Object>>> findByVariantOrCategoryName(@Param("name") String name);
+
 }

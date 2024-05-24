@@ -65,7 +65,7 @@ public class CustomerApiController {
         try {
             Customer exist = customerService.create(data);
             if (exist.getId() > 0) {
-                return new ResponseEntity<Customer>(exist, HttpStatus.OK);
+                return new ResponseEntity<Customer>(exist, HttpStatus.CREATED);
             } else {
                 return new ResponseEntity<String>("Customer Already Exist", HttpStatus.CONFLICT);
             }
