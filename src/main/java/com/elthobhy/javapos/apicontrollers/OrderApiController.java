@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.elthobhy.javapos.models.OrderDetail;
 import com.elthobhy.javapos.models.OrderHeader;
 import com.elthobhy.javapos.services.OrderService;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,12 +67,28 @@ public class OrderApiController {
     }
 
     @PutMapping("")
-    public ResponseEntity<?> ureate(@RequestBody OrderHeader data) {
+    public ResponseEntity<?> update(@RequestBody OrderHeader data) {
         // update order
         try {
             OrderHeader exist = orderService.update(data);
             if (exist.getId() > 0) {
                 return new ResponseEntity<OrderHeader>(exist, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<String>("Order does not exist", HttpStatus.CONFLICT);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/deleteOrder/{orderHeaderId}/{userId}")
+    public ResponseEntity<?> deleteOrder(@PathVariable long orderHeaderId, @PathVariable int userId) {
+        // update order
+        try {
+            OrderHeader exist = orderService.delete(orderHeaderId, userId);
+            if (exist.getId() > 0) {
+                OrderHeader result = orderService.getById(orderHeaderId);
+                return new ResponseEntity<OrderHeader>(result, HttpStatus.OK);
             } else {
                 return new ResponseEntity<String>("Order does not exist", HttpStatus.CONFLICT);
             }

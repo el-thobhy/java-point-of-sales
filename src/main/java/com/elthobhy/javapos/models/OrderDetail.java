@@ -28,9 +28,9 @@ public class OrderDetail {
     @Column(name = "product_id", nullable = false)
     private long productId;
     @Column(name = "qty")
-    private long qty;
+    private int qty;
     @Column(name = "price")
-    private long price;
+    private double price;
     // @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "order_headerid", updatable = false, insertable = false)
@@ -47,6 +47,22 @@ public class OrderDetail {
     private int updateBy;
     @Column(name = "update_date")
     private LocalDateTime updateDate;
+
+    public int getQty() {
+        return qty;
+    }
+
+    public void setQty(int qty) {
+        this.qty = qty;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
     public long getId() {
         return id;
@@ -70,22 +86,6 @@ public class OrderDetail {
 
     public void setProductId(long productId) {
         this.productId = productId;
-    }
-
-    public long getQty() {
-        return qty;
-    }
-
-    public void setQty(long qty) {
-        this.qty = qty;
-    }
-
-    public long getPrice() {
-        return price;
-    }
-
-    public void setPrice(long price) {
-        this.price = price;
     }
 
     public boolean isDeleted() {

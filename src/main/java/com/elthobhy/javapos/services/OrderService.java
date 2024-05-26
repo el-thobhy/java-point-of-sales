@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -103,13 +102,13 @@ public class OrderService {
                     OrderDetail detailBefore = orderDetailRepository.findById(detailNow.getId()).get();
 
                     Optional<Product> product = productRepository.findById(detailNow.getProductId());
+                    // check product current stockt
+                    int currentStock = product.get().getStock();
                     if (product.isEmpty()) {
                         throw new Exception(
                                 "Create new order canceled, " + "Product (ID = " + detailNow.getProductId()
                                         + ") doesn't exist");
                     } else {
-                        // check product current stockt
-                        int currentStock = product.get().getStock();
 
                         // jika current order less than before
                         if (detailNow.getQty() < detailBefore.getQty()) {
@@ -118,8 +117,9 @@ public class OrderService {
                             if (currentStock >= (detailNow.getQty() - detailBefore.getQty())) {
                                 currentStock -= detailNow.getQty() - detailBefore.getQty();
                             } else {
-                                throw new Exception("Create new order canceled, Product (ID = " + detailNow.getProductId()
-                                        + ") doesn't have enough stock");
+                                throw new Exception(
+                                        "Create new order canceled, Product (ID = " + detailNow.getProductId()
+                                                + ") doesn't have enough stock");
                             }
                         }
                         product.get().setStock(currentStock);
@@ -130,7 +130,7 @@ public class OrderService {
                     detailNow.setUpdateDate(LocalDateTime.now());
 
                     orderHeaderRepositroy.save(order);
-                    productRepository.save(product.get());
+                    productRepository.updateStock(detailNow.getProductId(), currentStock);
 
                     orderDetailRepository.save(detailNow);
                 }
@@ -140,5 +140,47 @@ public class OrderService {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             throw e;
         }
+    }
+
+    public OrderHeader delete(long orderHeaderId, int userId) throws Exception {
+        try {
+            Optional<OrderHeader> existHeader = orderHeaderRepositroy.findById(orderHeaderId);
+            if (existHeader.isPresent()) {
+                if (existHeader.get().isCheckedOut()) {
+                    throw new Exception("Order Already been Checked out");
+                }
+                orderHeaderRepositroy.deleteOrderHeader(orderHeaderId, userId);
+
+                List<OrderDetail> existDetail = existHeader.get().getOrderDetails();
+                if (!existDetail.isEmpty()) {
+                    // delete order detail allitem
+                    orderDetailRepository.deleteOrderDetail(orderHeaderId, userId, existHeader.get().getUpdateDate());
+
+                    // update stock per product
+                    for (OrderDetail detailItem : existDetail) {
+                        Optional<Product> existProduct = productRepository.findById(detailItem.getProductId());
+                        if (productRepository.findById(detailItem.getProductId()).isPresent()) {
+                            int currentStock = existProduct.get().getStock();
+                            productRepository.updateStock((existProduct.get().getId()),
+                                    currentStock + detailItem.getQty());
+                        } else {
+                            throw new Exception(
+                                    "Product dengan Id = " + existProduct.get().getId() + " Tidak ditemukan");
+                        }
+                    }
+
+                }
+            }
+            OrderHeader result = getById(orderHeaderId);
+            return result;
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            throw e;
+        }
+
+    }
+
+    public OrderHeader getById(Long id) throws Exception {
+        return orderHeaderRepositroy.findById(id).orElse(new OrderHeader());
     }
 }

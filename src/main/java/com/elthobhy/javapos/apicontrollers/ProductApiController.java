@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.elthobhy.javapos.models.Product;
 import com.elthobhy.javapos.services.ProductService;
 
@@ -121,6 +120,20 @@ public class ProductApiController {
                 return new ResponseEntity<Product>(data, HttpStatus.OK);
             } else {
                 return new ResponseEntity<String>("Product does'nt exist", HttpStatus.NO_CONTENT);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/updateStock/{productId}/{stock}")
+    public ResponseEntity<?> updateStoct(@PathVariable long productId, @PathVariable int stock) {
+        try {
+            Product updateStock = productService.updateStock(productId, stock);
+            if (updateStock.getId() == 0) {
+                return new ResponseEntity<String>("Product is not exist", HttpStatus.CONFLICT);
+            } else {
+                return new ResponseEntity<Product>(updateStock, HttpStatus.OK);
             }
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

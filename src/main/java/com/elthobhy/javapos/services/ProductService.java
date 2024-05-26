@@ -103,4 +103,10 @@ public class ProductService {
                 .orElseThrow(() -> new Exception("data not found"));
 
     }
+
+    public Product updateStock(long productId, int stock) {
+        Product data = productRepo.updateStock(productId, stock).orElse(new Product());
+        data.setUpdateDate(LocalDateTime.now());
+        return data;
+    }
 }

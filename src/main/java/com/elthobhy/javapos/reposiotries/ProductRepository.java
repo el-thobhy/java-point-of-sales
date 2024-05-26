@@ -61,4 +61,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {// data
                         " OR lower(\"categoryName\") LIKE " + "%:name%", nativeQuery = true)
         Optional<List<Map<String, Object>>> findByVariantOrCategoryName(@Param("name") String name);
 
+        @Query(value = "UPDATE tbl_m_product SET stock = :stock WHERE id=:productId RETURNING *", nativeQuery = true)
+        Optional<Product> updateStock(@Param("productId") long prductId, @Param("stock") int stock);
+
 }
