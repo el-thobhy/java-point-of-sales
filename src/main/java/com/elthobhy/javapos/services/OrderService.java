@@ -151,7 +151,8 @@ public class OrderService {
                 }
                 orderHeaderRepositroy.deleteOrderHeader(orderHeaderId, userId);
 
-                List<OrderDetail> existDetail = existHeader.get().getOrderDetails();
+                OrderHeader header = getById(orderHeaderId);
+                List<OrderDetail> existDetail = header.getOrderDetails();
                 if (!existDetail.isEmpty()) {
                     // delete order detail allitem
                     orderDetailRepository.deleteOrderDetail(orderHeaderId, userId, existHeader.get().getUpdateDate());

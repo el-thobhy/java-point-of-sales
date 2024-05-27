@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-// import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 // import org.springframework.transaction.annotation.Transactional;
@@ -32,9 +32,10 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
         // @Modifying
         // @Transactional
 
+        @Modifying(clearAutomatically = true)
         @Query(value = "UPDATE tbl_t_order_detail SET is_delete=true, update_by=:updateBy, update_date=:updateDateTime "
                         +
-                        " WHERE order_headerid = :orderHeaderId RETURNING is_delete", nativeQuery = true)
-        public boolean deleteOrderDetail(@Param("orderHeaderId") Long orderHeaderId, @Param("updateBy") int updateBy,
+                        " WHERE order_headerid = :orderHeaderId", nativeQuery = true)
+        public void deleteOrderDetail(@Param("orderHeaderId") Long orderHeaderId, @Param("updateBy") int updateBy,
                         @Param("updateDateTime") LocalDateTime updateDateTime);
 }
