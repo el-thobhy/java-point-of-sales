@@ -10,13 +10,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.elthobhy.javapos.models.Category;
 import com.elthobhy.javapos.models.Variant;
+import com.elthobhy.javapos.reposiotries.CategoryRepository;
 import com.elthobhy.javapos.reposiotries.VariantRepository;
 
 @Service
 public class VariantService {
     @Autowired
     private VariantRepository variantRepo;
+    @Autowired
+    private CategoryRepository categoryRepo;
 
     public List<Variant> getAll() throws Exception {
         try {
@@ -42,11 +46,16 @@ public class VariantService {
         }
     }
 
-    public Variant create(Variant data) {
-        Optional<Variant> categoryExist = variantRepo.findByName(data.getName());
-        if (categoryExist.isEmpty()) {
+    public Variant create(Variant data) throws Exception {
+        Optional<Variant> variantExist = variantRepo.findByName(data.getName());
+        if (variantExist.isEmpty()) {
             // create category
-            return variantRepo.save(data);
+            Optional<Category> catExist = categoryRepo.findById(data.getCategoryId());
+            if (catExist.isPresent()) {
+                return variantRepo.save(data);
+            } else {
+                throw new Exception("Category doesn't Exist");
+            }
         } else {
             // cancel
             return new Variant();
@@ -88,6 +97,10 @@ public class VariantService {
 
     public Variant getById(long id) throws Exception {
         return variantRepo.findById(id).orElseThrow(() -> new Exception("Data not found"));
+    }
+
+    public Map<String, Object> getByIdNative(long id) throws Exception {
+        return variantRepo.findByIdNative(id).orElseThrow(() -> new Exception("Data not found"));
     }
 
     public List<Variant> getByName(String name) throws Exception {

@@ -27,7 +27,7 @@ public class CategoryApiController {
         try {
             List<Category> data = categoryService.getAll();
             if (data.size() > 0) {
-                return new ResponseEntity<List<Category>>(data, HttpStatus.OK);
+                return new ResponseEntity<>(data, HttpStatus.OK);
             } else
                 return new ResponseEntity<List<Category>>(data, HttpStatus.NO_CONTENT);
         } catch (Exception e) {

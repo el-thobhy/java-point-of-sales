@@ -99,6 +99,19 @@ public class VariantApiController {
         }
     }
 
+    @GetMapping("/getByIdNative/{id}")
+    public ResponseEntity<?> getByIdNative(@PathVariable final long id) {
+        try {
+            Map<String, Object> exist = variantService.getByIdNative(id);
+            if (!exist.isEmpty()) {
+                return new ResponseEntity<Map<String, Object>>(exist, HttpStatus.OK);
+            } else
+                return new ResponseEntity<String>("Variant Not Found", HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("")
     public ResponseEntity<?> Create(@RequestBody Variant data) throws Exception {
         try {
