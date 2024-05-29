@@ -33,30 +33,30 @@
             </tr>
           </thead>
           <tbody>
-            <tr th:each="i : ${data}">
-              <td th:text="${i.Id}"></td>
-              <td th:text="${i.Name}"></td>
-              <td th:text="${i.Description}"></td>
+            <tr th:if="${#lists.size(data)>0}" th:each="i : ${data}">
+              <td th:text="${i.id}"></td>
+              <td th:text="${i.name}"></td>
+              <td th:text="${i.description}"></td>
               <td th:text="${i.price}"></td>
               <td th:text="${i.stock}"></td>
               <td class="d-flex justify-content-center">
                 <div class="btn-group">
                   <button
-                    th:value="${'/product/'+i.Id}"
+                    th:value="${'/product/'+i.id}"
                     class="btn btn-primary"
                     data-id="Detail"
                   >
                     <i class="fas fa-circle-info"></i>
                   </button>
                   <button
-                    th:value="${'/product/'+i.Id}"
+                    th:value="${'/product/'+i.id}"
                     class="btn btn-info"
                     data-id="Edit"
                   >
                     <i class="fas fa-pen-to-square"></i>
                   </button>
                   <button
-                    th:value="${'/product/'+i.Id}"
+                    th:value="${'/product/'+i.id}"
                     class="btn btn-danger"
                     data-id="Delete"
                   >
@@ -64,6 +64,9 @@
                   </button>
                 </div>
               </td>
+            </tr>
+            <tr th:if="${errorMessage} != ''">
+              <td th:text="${errorMessage}">Error</td>
             </tr>
           </tbody>
         </table>

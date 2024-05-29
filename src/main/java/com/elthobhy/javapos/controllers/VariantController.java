@@ -3,7 +3,6 @@ package com.elthobhy.javapos.controllers;
 // import java.util.List;
 // import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 // import org.springframework.http.MediaType;
@@ -18,20 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.elthobhy.javapos.models.Variant;
-import com.elthobhy.javapos.services.CategoryService;
-import com.elthobhy.javapos.services.VariantService;
+import com.elthobhy.javapos.viewmodel.CategoryViewModel;
 import com.elthobhy.javapos.viewmodel.VariantViewModel;
 
 @Controller
 @RequestMapping("/variant")
 public class VariantController {
-    @Autowired
-    VariantService vasSvc;
-    @Autowired
-    CategoryService catSvc;
 
     private final String apiUrl = "http://localhost:8080/api/variant";
+    private final String apiUrlCat = "http://localhost:8080/api/category";
     private RestTemplate restTemp = new RestTemplate();
 
     @GetMapping("")
@@ -83,30 +77,35 @@ public class VariantController {
     @GetMapping("/add")
     ModelAndView Add() {
         ModelAndView view = new ModelAndView("/variant/add");
+
         try {
-            view.addObject("categories", catSvc.getAll());
-            return view;
+            ResponseEntity<CategoryViewModel[]> apiResponse = restTemp.getForEntity(apiUrlCat,
+                    CategoryViewModel[].class);
+            if (apiResponse.getStatusCode() == HttpStatus.OK) {
+                view.addObject("categories", apiResponse.getBody());
+            } else {
+                throw new Exception("Fail get Category");
+            }
         } catch (Exception e) {
-            return view;
+            view.addObject("errorMessage", e.getMessage());
         }
+        return view;
     }
 
     @PostMapping("/save")
-    ModelAndView Save(@ModelAttribute Variant data) throws Exception {
+    ModelAndView Save(@ModelAttribute VariantViewModel data) throws Exception {
+        ModelAndView view = new ModelAndView("redirect:/variant");
         try {
-            ModelAndView view = new ModelAndView("redirect:/variant");
-            Variant newVar = vasSvc.create(data);
-            if (newVar.getId() > 0) {
+            ResponseEntity<CategoryViewModel> apiResponse = restTemp.postForEntity(apiUrl, data,
+                    CategoryViewModel.class);
+            if (apiResponse.getStatusCode() == HttpStatus.CREATED) {
                 System.out.println("New Variant added");
-                return view;
             } else {
                 throw new Exception("New Variant cannot be added");
             }
         } catch (Exception e) {
-            ModelAndView view = new ModelAndView("/variant/error");
             System.out.println(e.getMessage());
-            view.addObject("alertMessage", e.getMessage());
-            return view;
         }
+        return view;
     }
 }

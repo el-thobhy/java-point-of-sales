@@ -1,42 +1,44 @@
 package com.elthobhy.javapos.controllers;
 
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.elthobhy.javapos.services.ProductService;
-import com.elthobhy.javapos.models.Product;
-import com.elthobhy.javapos.services.CategoryService;
-import com.elthobhy.javapos.services.VariantService;
+import com.elthobhy.javapos.viewmodel.CategoryViewModel;
+import com.elthobhy.javapos.viewmodel.ProductViewModel;
+import com.elthobhy.javapos.viewmodel.VariantViewModel;
 
 @Controller
 @RequestMapping("/product")
 public class ProductController {
-    @Autowired
-    ProductService proSvc;
-    @Autowired
-    CategoryService catSvc;
-    @Autowired
-    VariantService varSvc;
+
+    private final String apiVar = "http://localhost:8080/api/variant";
+    private final String apiCat = "http://localhost:8080/api/category";
+    private final String apiPro = "http://localhost:8080/api/product";
+    private final RestTemplate restTemp = new RestTemplate();
 
     @GetMapping("")
     ModelAndView Index() {
         ModelAndView view = new ModelAndView("/product/index");
         try {
-            List<Map<String, Object>> data = proSvc.getAllNative();
-            view.addObject("data", data);
-            return view;
+            ResponseEntity<ProductViewModel[]> apiResponse = restTemp.getForEntity(apiPro, ProductViewModel[].class);
+            if (apiResponse.getStatusCode() == HttpStatus.OK) {
+                ProductViewModel[] data = apiResponse.getBody();
+                view.addObject("data", data);
+            } else {
+                throw new Exception("Fail to get Data");
+            }
         } catch (Exception e) {
-            return view;
+            view.addObject("errorMessage", e.getMessage());
         }
+        return view;
     }
 
     @GetMapping("/{id}")
@@ -50,30 +52,37 @@ public class ProductController {
     ModelAndView Add() {
         ModelAndView view = new ModelAndView("/product/add");
         try {
-            view.addObject("categories", catSvc.getAll());
-            view.addObject("variants", varSvc.getAll());
-            return view;
+            ResponseEntity<VariantViewModel[]> varRes = restTemp.getForEntity(apiVar, VariantViewModel[].class);
+            ResponseEntity<CategoryViewModel[]> catRes = restTemp.getForEntity(apiCat, CategoryViewModel[].class);
+            if (catRes.getStatusCode() == HttpStatus.OK) {
+                view.addObject("categories", catRes.getBody());
+            } else {
+                throw new Exception("Fail Get Data category");
+            }
+            if (varRes.getStatusCode() == HttpStatus.OK) {
+                view.addObject("variants", varRes.getBody());
+            } else {
+                throw new Exception("Fail Get Data variant");
+            }
         } catch (Exception e) {
-            return view;
+            view.addObject("errorMessage", e.getMessage());
         }
+        return view;
     }
 
     @PostMapping("/save")
-    ModelAndView Save(@ModelAttribute Product data) throws Exception {
+    ModelAndView Save(@ModelAttribute ProductViewModel data) throws Exception {
+        ModelAndView view = new ModelAndView("redirect:/product");
         try {
-            ModelAndView view = new ModelAndView("redirect:/product");
-            Product newVar = proSvc.create(data);
-            if (newVar.getId() > 0) {
+            ResponseEntity<ProductViewModel> apiRes = restTemp.postForEntity(apiPro, data, ProductViewModel.class);
+            if (apiRes.getStatusCode() == HttpStatus.CREATED) {
                 System.out.println("New Product added");
-                return view;
             } else {
                 throw new Exception("New Product cannot be added");
             }
         } catch (Exception e) {
-            ModelAndView view = new ModelAndView("/product/error");
-            System.out.println(e.getMessage());
             view.addObject("alertMessage", e.getMessage());
-            return view;
         }
+        return view;
     }
 }

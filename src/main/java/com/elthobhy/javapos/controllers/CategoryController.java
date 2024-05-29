@@ -1,6 +1,5 @@
 package com.elthobhy.javapos.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -11,7 +10,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.elthobhy.javapos.models.Category;
-import com.elthobhy.javapos.services.CategoryService;
+import com.elthobhy.javapos.viewmodel.CategoryViewModel;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
@@ -19,8 +19,6 @@ import org.springframework.http.HttpStatus;
 @Controller
 @RequestMapping("/category")
 public class CategoryController {
-    @Autowired
-    CategoryService catSvc;
 
     private final String apiUrl = "http://localhost:8080/api/category";
     private RestTemplate restTemp = new RestTemplate();
@@ -82,10 +80,11 @@ public class CategoryController {
     }
 
     @PostMapping("/save")
-    ModelAndView Save(@ModelAttribute Category data) {
+    ModelAndView Save(@ModelAttribute CategoryViewModel data) {
         try {
-            Category newCat = catSvc.create(data);
-            if (newCat.getId() > 0) {
+            ResponseEntity<CategoryViewModel> apiResponse = restTemp.postForEntity(apiUrl, data,
+                    CategoryViewModel.class);
+            if (apiResponse.getStatusCode() == HttpStatus.CREATED) {
                 System.out.println("New Category added");
             } else {
                 throw new Exception("New Category cannot be added");
