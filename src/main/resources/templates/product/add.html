@@ -4,13 +4,19 @@
       <label class="form-label">Name</label>
       <input class="form-control" type="text" name="name" />
     </div>
-    <div class="form-group">
-      <label class="form-label">Price</label>
-      <input class="form-control" type="number" name="price" />
-    </div>
-    <div class="form-group">
-      <label class="form-label">Stock</label>
-      <input class="form-control" type="number" name="stock" />
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group">
+          <label class="form-label">Price</label>
+          <input class="form-control" type="number" name="price" />
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="form-group">
+          <label class="form-label">Stock</label>
+          <input class="form-control" type="number" name="stock" />
+        </div>
+      </div>
     </div>
 
     <div class="form-group">
@@ -19,7 +25,15 @@
     </div>
 
     <div class="form-group">
-      <label class="form-label">Image</label>
+      <label class="form-label" style="display: block; margin-bottom: 2px"
+        >Image</label
+      ><input
+        style="padding: 12px; display: block"
+        type="file"
+        value=""
+        name="filename"
+        accept="image/gif, image/jpeg, image/png"
+      />
     </div>
     <div class="form-group">
       <label class="form-label">Variant ID</label>
@@ -53,6 +67,12 @@
       description: {
         required: true,
         minlength: 3,
+      },
+      price: {
+        required: true,
+      },
+      stock: {
+        required: true,
       },
       variantId: {
         required: true,
