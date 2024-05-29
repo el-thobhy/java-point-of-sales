@@ -1,5 +1,6 @@
 <fieldset>
-  <form id="frmNewCategory" th:action="@{~/category/save}" method="post">
+  <form id="frmNewCategory">
+    <!-- <form id="frmNewCategory" th:action="@{~/category/save}" method="post"> -->
     <div class="form-group">
       <label class="form-label">Name</label>
       <input class="form-control" type="text" name="name" />
@@ -25,11 +26,53 @@
       name: {
         required: true,
         minlength: 3,
+        maxlength: 100,
       },
       description: {
         required: true,
         minlength: 3,
+        maxlength: 200,
       },
     },
+    // submitHandler: function (form) {
+    //   debugger;
+    //   var formData = $(form).serialize();
+    //   console.log(JSON.stringify(formData));
+    //   $.ajax({
+    //     url: "http://localhost:8080/api/category",
+    //     type: "post",
+    //     data: JSON.stringify(formData),
+    //     dataType: "json",
+    //     success: function (res) {
+    //       alert("berhasil ");
+    //     },
+    //     error: function (err) {
+    //       alert("gagal " + err);
+    //       console.log(err);
+    //     },
+    //   });
+    // },
+  });
+  $("#frmNewCategory").submit(function (e) {
+    e.preventDefault();
+    if ($("#frmNewCategory").valid()) {
+      $.ajax({
+        url: "http://localhost:8080/category/save",
+        type: "post",
+        data: $("#frmNewCategory").serialize(),
+        dataType: "json",
+        beforeSend: () => {},
+        success: function (res) {
+          debugger;
+          console.log(res);
+          location.reload();
+        },
+        error: function (err) {
+          debugger;
+          alert("gagal " + err);
+          console.log(err);
+        },
+      });
+    }
   });
 </script>

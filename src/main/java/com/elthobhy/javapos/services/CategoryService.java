@@ -30,6 +30,18 @@ public class CategoryService {
         }
     }
 
+    public List<Category> getAllNative() throws Exception {
+        try {
+            List<Category> data = categoryRepo.findAllNative().get();
+            if (data.size() > 0) {
+                return data;
+            } else
+                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Category has no data");
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
     public Category create(Category data) {
         this.exist = categoryRepo.findByName(data.getName());
         if (exist.isEmpty()) {

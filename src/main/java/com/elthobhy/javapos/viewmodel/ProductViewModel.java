@@ -2,8 +2,6 @@ package com.elthobhy.javapos.viewmodel;
 
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.CreationTimestamp;
-
 public class ProductViewModel {
     private long id;
     private long variantId;

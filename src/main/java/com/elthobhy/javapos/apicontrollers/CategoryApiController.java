@@ -35,6 +35,19 @@ public class CategoryApiController {
         }
     }
 
+    @GetMapping("/allNative")
+    public ResponseEntity<?> getAllNative() {
+        try {
+            List<Category> data = categoryService.getAllNative();
+            if (data.size() > 0) {
+                return new ResponseEntity<>(data, HttpStatus.OK);
+            } else
+                return new ResponseEntity<List<Category>>(data, HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/getByName/{name}")
     public ResponseEntity<?> getByName(@PathVariable String name) throws Exception {
         try {

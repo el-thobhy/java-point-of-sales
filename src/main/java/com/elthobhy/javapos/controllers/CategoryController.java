@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,7 +14,11 @@ import com.elthobhy.javapos.models.Category;
 import com.elthobhy.javapos.viewmodel.CategoryViewModel;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 //pola uri = {domain}/{controller}/{method/action}/{param}
 @Controller
@@ -28,7 +33,7 @@ public class CategoryController {
         // add data to view
         ModelAndView view = new ModelAndView("/category/index");
         try {
-            ResponseEntity<Category[]> apiResponse = restTemp.getForEntity(apiUrl, Category[].class);
+            ResponseEntity<Category[]> apiResponse = restTemp.getForEntity(apiUrl + "/allNative", Category[].class);
             if (apiResponse.getStatusCode() == HttpStatus.OK) {
                 Category[] data = apiResponse.getBody();
                 view.addObject("data", data);
@@ -80,18 +85,59 @@ public class CategoryController {
     }
 
     @PostMapping("/save")
-    ModelAndView Save(@ModelAttribute CategoryViewModel data) {
+    ResponseEntity<?> Save(@ModelAttribute CategoryViewModel data) {
         try {
             ResponseEntity<CategoryViewModel> apiResponse = restTemp.postForEntity(apiUrl, data,
                     CategoryViewModel.class);
             if (apiResponse.getStatusCode() == HttpStatus.CREATED) {
                 System.out.println("New Category added");
+                return new ResponseEntity<CategoryViewModel>(apiResponse.getBody(), apiResponse.getStatusCode());
             } else {
                 throw new Exception("New Category cannot be added");
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ModelAndView("redirect:/category");
+    }
+
+    @GetMapping("/edit/{id}")
+    ModelAndView Edit(@PathVariable Long id) throws Exception {
+        ModelAndView view = new ModelAndView("/category/edit");
+        try {
+            ResponseEntity<CategoryViewModel> apiResponse = restTemp.getForEntity(apiUrl + "/getById/" + id,
+                    CategoryViewModel.class);
+            if (apiResponse.getStatusCode() == HttpStatus.OK) {
+                CategoryViewModel cat = apiResponse.getBody();
+                view.addObject("fill", cat);
+            } else {
+                throw new Exception(apiResponse.getStatusCode().toString() + ":" + apiResponse.getBody());
+            }
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+        return view;
+    }
+
+    @PutMapping("/update")
+    ResponseEntity<?> Update(@ModelAttribute CategoryViewModel data) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            // Membuat objek HttpEntity dengan data dan headers
+            HttpEntity<CategoryViewModel> requestEntity = new HttpEntity<>(data, headers);
+
+            ResponseEntity<CategoryViewModel> apiResponse = restTemp.exchange(apiUrl, HttpMethod.PUT, requestEntity,
+                    CategoryViewModel.class);
+            if (apiResponse.getStatusCode() == HttpStatus.OK) {
+                System.out.println("New Category Updated");
+                return new ResponseEntity<CategoryViewModel>(apiResponse.getBody(), apiResponse.getStatusCode());
+            } else {
+                throw new Exception("New Category cannot be Updated");
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
