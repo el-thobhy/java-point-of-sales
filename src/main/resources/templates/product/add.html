@@ -1,0 +1,62 @@
+<fieldset>
+  <form id="frmNewproduct" th:action="@{~/product/save}" method="post">
+    <div class="form-group">
+      <label class="form-label">Name</label>
+      <input class="form-control" type="text" name="name" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Price</label>
+      <input class="form-control" type="number" name="price" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Stock</label>
+      <input class="form-control" type="number" name="stock" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Description</label>
+      <input class="form-control" type="text" name="description" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Image</label>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Variant ID</label>
+      <select class="form-control" name="variantId">
+        <option value="">---Select Variant---</option>
+        <option
+          th:each="var:${variants}"
+          th:value="${var.id}"
+          th:text="${var.name}"
+        ></option>
+      </select>
+    </div>
+
+    <div>
+      <button type="submit" class="mt-3 btn btn-primary" value="Save">
+        <i class="fas fa-save"></i>
+        Save
+      </button>
+    </div>
+    <input type="hidden" name="CraeteBy" value="1" />
+  </form>
+</fieldset>
+<script>
+  $("#frmNewproduct").validate({
+    errorClass: "text-danger",
+    rules: {
+      name: {
+        required: true,
+        minlength: 3,
+      },
+      description: {
+        required: true,
+        minlength: 3,
+      },
+      variantId: {
+        required: true,
+      },
+    },
+  });
+</script>

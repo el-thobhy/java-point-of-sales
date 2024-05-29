@@ -1,0 +1,26 @@
+<div layout:fragment="content">
+  <input type="hidden" id="variantId" th:value="${id}" />
+  <h1>Variant Details of Id = <span th:text="${id}"></span></h1>
+  <div>
+    <ul id="dataList"></ul>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    let catId = $("#variantId").val();
+    $.ajax({
+      url: "/api/variant/getByIdNative/" + catId,
+      type: "get",
+      beforeSend: function () {},
+      success: function (result) {
+        $.each(result, function (key, value) {
+          $("#dataList").append(`<li>${key}: ${value}</li>`);
+          console.log(key + ": " + value);
+        });
+      }, //jika response code 200/201, sisanya masuk error
+      error: function (errResult) {
+        console.error("Variant Error: " + errResult);
+      },
+    });
+  });
+</script>
