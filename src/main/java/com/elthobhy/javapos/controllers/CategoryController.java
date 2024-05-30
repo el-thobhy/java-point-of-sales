@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,11 +13,7 @@ import com.elthobhy.javapos.models.Category;
 import com.elthobhy.javapos.viewmodel.CategoryViewModel;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
 //pola uri = {domain}/{controller}/{method/action}/{param}
 @Controller
@@ -119,25 +114,47 @@ public class CategoryController {
         return view;
     }
 
-    @PutMapping("/update")
-    ResponseEntity<?> Update(@ModelAttribute CategoryViewModel data) {
+    @PostMapping("/update")
+    ResponseEntity<?> Update(CategoryViewModel data) {
+        ResponseEntity<?> apiResponse = null;
         try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            // Membuat objek HttpEntity dengan data dan headers
-            HttpEntity<CategoryViewModel> requestEntity = new HttpEntity<>(data, headers);
-
-            ResponseEntity<CategoryViewModel> apiResponse = restTemp.exchange(apiUrl, HttpMethod.PUT, requestEntity,
-                    CategoryViewModel.class);
-            if (apiResponse.getStatusCode() == HttpStatus.OK) {
-                System.out.println("New Category Updated");
-                return new ResponseEntity<CategoryViewModel>(apiResponse.getBody(), apiResponse.getStatusCode());
-            } else {
-                throw new Exception("New Category cannot be Updated");
-            }
+            restTemp.put(apiUrl, data);
+            apiResponse = restTemp.getForEntity(apiUrl + "/getById/" + data.getId(), CategoryViewModel.class);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            apiResponse = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return apiResponse;
+    }
+
+    @PostMapping("/deleteAction")
+    ResponseEntity<?> Delete(CategoryViewModel data) {
+        ResponseEntity<?> apiResponse = null;
+        try {
+            restTemp.delete(apiUrl + "/" + data.getId() + "/" + data.getUpdateBy());
+            apiResponse = restTemp.getForEntity(apiUrl + "/getById/" + data.getId(), CategoryViewModel.class);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            apiResponse = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return apiResponse;
+    }
+
+    @GetMapping("/delete/{id}")
+    ModelAndView GetdataDelete(@PathVariable Long id) throws Exception {
+        ModelAndView view = new ModelAndView("/category/delete");
+        try {
+            ResponseEntity<CategoryViewModel> apiResponse = restTemp.getForEntity(apiUrl + "/getById/" + id,
+                    CategoryViewModel.class);
+            if (apiResponse.getStatusCode() == HttpStatus.OK) {
+                CategoryViewModel cat = apiResponse.getBody();
+                view.addObject("fill", cat);
+            } else {
+                throw new Exception(apiResponse.getStatusCode().toString() + ":" + apiResponse.getBody());
+            }
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+        return view;
     }
 }

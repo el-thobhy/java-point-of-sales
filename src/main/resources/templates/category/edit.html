@@ -51,8 +51,8 @@
     e.preventDefault();
     if ($("#frmUpdateCategory").valid()) {
       $.ajax({
-        url: "http://localhost:8080/category/update",
-        type: "put",
+        url: "/category/update",
+        type: "post",
         data: $("#frmUpdateCategory").serialize(),
         dataType: "json",
         beforeSend: () => {},

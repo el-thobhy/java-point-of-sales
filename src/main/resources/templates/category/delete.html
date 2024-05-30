@@ -1,0 +1,58 @@
+<fieldset>
+  <form id="deleteCat">
+    <div class="form-group">
+      <input type="hidden" name="id" th:value="${fill.id}" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Name</label>
+      <input
+        class="form-control"
+        type="text"
+        name="name"
+        th:value="${fill.name}"
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Description</label>
+      <input
+        class="form-control"
+        type="text"
+        name="description"
+        th:value="${fill.description}"
+      />
+    </div>
+    <div>
+      <button type="submit" class="mt-3 btn btn-danger" value="Save">
+        <i class="fas fa-save"></i>
+        Delete
+      </button>
+    </div>
+    <input type="hidden" name="updateBy" value="1" />
+  </form>
+</fieldset>
+<script>
+  $("#deleteCat").submit(function (e) {
+    debugger;
+    e.preventDefault();
+    if ($("#deleteCat").valid()) {
+      $.ajax({
+        url: "/category/deleteAction",
+        type: "post",
+        data: $("#deleteCat").serialize(),
+        dataType: "json",
+        beforeSend: () => {},
+        success: function (res) {
+          debugger;
+          console.log(res);
+          location.reload();
+        },
+        error: function (err) {
+          debugger;
+          alert("gagal " + err);
+          console.log(err);
+        },
+      });
+    }
+  });
+</script>
