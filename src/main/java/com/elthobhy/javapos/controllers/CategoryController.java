@@ -131,7 +131,7 @@ public class CategoryController {
     ResponseEntity<?> Delete(CategoryViewModel data) {
         ResponseEntity<?> apiResponse = null;
         try {
-            restTemp.delete(apiUrl + "/" + data.getId() + "/" + data.getUpdateBy());
+            restTemp.delete(apiUrl + "/" + data.getId() + "/" + data.getUpdateBy(), data);
             apiResponse = restTemp.getForEntity(apiUrl + "/getById/" + data.getId(), CategoryViewModel.class);
         } catch (Exception e) {
             System.out.println(e.getMessage());

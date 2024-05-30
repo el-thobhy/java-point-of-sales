@@ -74,7 +74,7 @@
       <script>
         let catId;
         //detail
-        $(".btn-primary").click(function (e) {
+        $(".btn-group > .btn-primary").click(function (e) {
           var title = $(this).data("id");
           $("#modalLgBody").load("/category/" + this.value);
           $("#modalLgLabel").text("Category " + title);
@@ -90,7 +90,7 @@
           // console.log(this.value);
         });
         //edit modal
-        $(".btn-info").click(function (e) {
+        $(".btn-group > .btn-info").click(function (e) {
           var title = $(this).data("id");
           $("#modalLgBody").load(this.value);
           $("#modalLgLabel").text("Category " + title);
@@ -98,7 +98,7 @@
           // console.log(this.value);
         });
         //delete modal
-        $(".btn-danger").click(function (e) {
+        $(".btn-group > .btn-danger").click(function (e) {
           var title = $(this).data("id");
           $("#modalLgBody").load(this.value);
           $("#modalLgLabel").text("Category " + title);
