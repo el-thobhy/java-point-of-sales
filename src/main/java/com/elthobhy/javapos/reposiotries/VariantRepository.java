@@ -41,9 +41,9 @@ public interface VariantRepository extends JpaRepository<Variant, Long> {// data
                         "    v.description " + //
                         "FROM " + //
                         "    tbl_m_variant AS v " + //
-                        "    LEFT JOIN tbl_m_category AS c ON v.category_id = c.id " + //
+                        "    RIGHT JOIN tbl_m_category AS c ON v.category_id = c.id " + //
                         "WHERE " + //
-                        "    v.is_deleted IS NOT true" +
+                        "    v.is_deleted = false AND c.is_delete = false" +
                         " ORDER BY v.id", nativeQuery = true)
         Optional<List<Map<String, Object>>> findAllNative();
 

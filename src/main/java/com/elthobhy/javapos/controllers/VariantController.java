@@ -108,4 +108,43 @@ public class VariantController {
         }
         return view;
     }
+
+    @GetMapping("/edit/{id}")
+    ModelAndView Edit(@PathVariable Long id) throws Exception {
+        ModelAndView view = new ModelAndView("/variant/edit");
+        try {
+            ResponseEntity<CategoryViewModel[]> apiResponseCat = restTemp.getForEntity(apiUrlCat,
+                    CategoryViewModel[].class);
+            ResponseEntity<VariantViewModel> apiResponse = restTemp.getForEntity(apiUrl + "/getByIdNative/" + id,
+                    VariantViewModel.class);
+
+            if (apiResponseCat.getStatusCode() == HttpStatus.OK) {
+                CategoryViewModel[] cat = apiResponseCat.getBody();
+                view.addObject("categories", cat);
+            } else {
+                throw new Exception(apiResponse.getStatusCode().toString() + ":" + apiResponse.getBody());
+            }
+            if (apiResponse.getStatusCode() == HttpStatus.OK) {
+                VariantViewModel var = apiResponse.getBody();
+                view.addObject("var", var);
+            } else {
+                throw new Exception(apiResponse.getStatusCode().toString() + ":" + apiResponse.getBody());
+            }
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+        return view;
+    }
+
+    @PostMapping("/update")
+    ResponseEntity<?> Update(VariantViewModel data) throws Exception {
+        ResponseEntity<?> apiResponse = null;
+        try {
+            restTemp.put(apiUrl, data);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            apiResponse = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return apiResponse;
+    }
 }
