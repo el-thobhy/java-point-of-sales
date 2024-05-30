@@ -88,7 +88,7 @@ public class CategoryService {
     }
 
     public Category getById(long id) throws Exception {
-        return categoryRepo.findById(id).orElseThrow(() -> new Exception("Data not found"));
+        return categoryRepo.findByIdAndDeleted(id, false).orElseThrow(() -> new Exception("Data not found"));
     }
 
     public List<Category> getByName(String name) throws Exception {

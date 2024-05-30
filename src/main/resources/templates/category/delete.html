@@ -16,25 +16,27 @@
 
 <script>
   $(".card-footer > .btn-info").click(function () {
+    debugger;
     // $(".modal-header > .btn-close").click();//atau
     $(".modal-header > .btn-close").trigger("click"); //atau
   });
   $("#formDeleteConfirm").submit(function (e) {
+    debugger;
     e.preventDefault();
     $.ajax({
       url: "/category/deleteAction",
       type: "post",
       data: $("#formDeleteConfirm").serialize(),
-      dataType: "json",
       beforeSend: () => {},
       success: function (res) {
         debugger;
+        alert(res);
         console.log(res);
         location.reload();
       },
       error: function (err) {
         debugger;
-        alert("gagal " + err);
+        alert("gagal " + err.responseText);
         console.log(err);
       },
     });

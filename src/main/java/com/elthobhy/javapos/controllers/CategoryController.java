@@ -131,8 +131,12 @@ public class CategoryController {
     ResponseEntity<?> Delete(CategoryViewModel data) {
         ResponseEntity<?> apiResponse = null;
         try {
-            restTemp.delete(apiUrl + "/" + data.getId() + "/" + data.getUpdateBy(), data);
             apiResponse = restTemp.getForEntity(apiUrl + "/getById/" + data.getId(), CategoryViewModel.class);
+            if (apiResponse.getStatusCode() == HttpStatus.OK) {
+                restTemp.delete(apiUrl + "/" + data.getId() + "/" + data.getUpdateBy());
+                apiResponse = new ResponseEntity<String>("Category ID " + data.getId() + " Deleted", HttpStatus.OK);
+            } else
+                throw new Exception("Category Id " + data.getId() + " cannot be deleted");
         } catch (Exception e) {
             System.out.println(e.getMessage());
             apiResponse = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

@@ -26,6 +26,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {// da
 
         Optional<Category> findById(long id);
 
+        Optional<Category> findByIdAndDeleted(long id, boolean deleted);
+
         Optional<List<Category>> findByNameContainsIgnoreCase(String name); // jika cek kata yang banyak
 
         Optional<List<Category>> findByDescriptionContainsIgnoreCase(String description); // jika cek kata yang banyak
